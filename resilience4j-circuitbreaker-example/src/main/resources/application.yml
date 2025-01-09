@@ -1,0 +1,35 @@
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 3
+        failureRateThreshold: 50
+        permittedNumberOfCallsInHalfOpenState: 3
+        registerHealthIndicator: true
+        waitDurationInOpenState: 10000 # Open 상태로 유지될 시간 (밀리초)
+        slowCallDurationThreshold: 1000 # 느린 호출(slow call)로 판단하는 호출 시간
+    instances:
+      response-api:
+        slidingWindowType: COUNT_BASED # COUNT_BASED or TIME_BASED
+        registerHealthIndicator: true # actuator 용도
+        slidingWindowSize: 3      # 슬라이딩 윈도우 크기 : COUNT_BASED = array 크기, TIME_BASED =  초
+        failureRateThreshold: 50  # Circuit이 OPEN되는 실패율
+        waitDurationInOpenState: 10000 # Open 상태로 유지될 시간 (밀리초)
+        permittedNumberOfCallsInHalfOpenState: 3 # HALF_OPEN 상태일 때 허용되는 호출 수
+        minimumNumberOfCalls: 3 # Circuit 동작시키기위한 최소한의 call 수 (지연일때 필요한 최소한의 호출 수)
+        automaticTransitionFromOpenToHalfOpenEnabled: true # OPEN -> HALF_OPEN 자동 변경 여부
+        slowCallDurationThreshold: 1000 # 느린 호출(slow call)로 판단하는 호출 시간
+      other-api:
+        baseConfig: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*" # 테스트를 위해 actuator 전체 노출
+
+  health:
+    circuitbreakers:
+      enabled: true # circuitbreakers 정보 노출
