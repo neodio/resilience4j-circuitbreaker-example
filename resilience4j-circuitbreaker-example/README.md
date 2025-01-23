@@ -5,7 +5,7 @@
 - macOS
 - java 17
 - spring boot 3.4.1
-- gradle 8.11.1
+- gradle 8.11.1 
 
 ## CircuitBreaker 리스트 조회
 http://localhost:8080/actuator/circuitbreakers
